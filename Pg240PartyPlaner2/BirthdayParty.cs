@@ -5,18 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Pg240PartyPlaner2 {
-    class BirthdayParty {
-        public const int CostOfFoodPerPerson = 25;
-        public int NumberOfGuests { get; set; }
-        public bool FancyDecorations { get; set; }
-        public string CakeWriting { get; set; }
-
+    class BirthdayParty : Party {
         public BirthdayParty(int numberOfGuests, bool fancyDecorations, string cakeWriting) {
             NumberOfGuests = numberOfGuests;
             FancyDecorations = fancyDecorations;
             CakeWriting = cakeWriting;
         }
 
+        public string CakeWriting { get; set; }
         public bool CakeWritingTooLong {
             get {
                 if (CakeWriting.Length > MaxWritingLength())
@@ -26,13 +22,10 @@ namespace Pg240PartyPlaner2 {
             }
         }
 
-        public decimal Cost {
+        override public decimal Cost {
             get {
-                decimal totalCost = CalcCostOfDecos();
+                decimal totalCost = base.Cost;
                 decimal cakeCost;
-                totalCost += CostOfFoodPerPerson * NumberOfGuests;
-                if (NumberOfGuests > 12)
-                    totalCost += 100M;
                 if (CakeSize() == 8)
                     cakeCost = 40M + ActualLength * 0.25M;
                 else
@@ -48,13 +41,6 @@ namespace Pg240PartyPlaner2 {
                 else
                     return CakeWriting.Length;
             }
-        }
-
-        private decimal CalcCostOfDecos() {
-            if (FancyDecorations)
-                return (NumberOfGuests * 15.00M) + 50M;
-            else
-                return (NumberOfGuests * 7.50M) + 30M;
         }
 
         private int CakeSize() {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Pg240PartyPlaner2 {
-    class DinnerParty {
+    class DinnerParty : Party {
 
         public DinnerParty(int numberOfGuests, bool alcohol, bool fancyDecorations) {
             NumberOfGuests = numberOfGuests;
@@ -13,30 +13,16 @@ namespace Pg240PartyPlaner2 {
             FancyDecorations = fancyDecorations;
         }
 
-        // properties
-        public int NumberOfGuests { get; set; }
-        public bool FancyDecorations { get; set; }
         public bool Alcohol { get; set; }
-        public decimal Cost {
+
+        override public decimal Cost {
             get {
-                decimal totalCost = CalcCostOfDeco(FancyDecorations) + CalcCostOfDrinks(Alcohol) + (NumberOfGuests * 25M);
-                if (NumberOfGuests > 12)
-                    totalCost += 100M;
+                decimal totalCost = base.Cost;
+                totalCost += CalcCostOfDrinks(Alcohol);
                 if (Alcohol)
                     return totalCost;
                 else
-                    return totalCost * 25M * 0.95M;
-            }
-            set {
-                Cost = value;
-            }
-        }
-
-        private decimal CalcCostOfDeco(bool fancy) {
-            if (fancy) {
-                return NumberOfGuests * 15M + 50;
-            } else {
-                return NumberOfGuests * 7.5M + 30;
+                    return totalCost + 25M * 0.95M;
             }
         }
 
